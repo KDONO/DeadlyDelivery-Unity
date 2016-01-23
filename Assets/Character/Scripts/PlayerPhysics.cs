@@ -9,6 +9,7 @@ public class PlayerPhysics : MonoBehaviour {
     public float maxSpeed = .3f;            // the fastest the player can move
     public float acceleration = 1;          // how fast to interpolate to maxSpeed
     public float jumpHeight = .6f;          // how high can we jump
+    public Animator anim;                   // Animator 
     //public LayerMask collisionMask;         // what will we collide with
     #endregion
 
@@ -74,11 +75,18 @@ public class PlayerPhysics : MonoBehaviour {
         originalSize = collider.size;
         originalOffset = collider.offset;
         SetCollider(originalSize, originalOffset);
+
+        anim = GetComponent<Animator>();
     }
 
     // On a fixed interval, check if the player is on the ground
     private void FixedUpdate()
     {
+        //animations
+        float move = Input.GetAxis("Horizontal");
+        anim.SetFloat("Speed", Mathf.Abs(move));
+
+    
         isGrounded = false;
 
         // The player is grounded if a circlecast to the groundcheck position hits anything designated as ground
@@ -357,12 +365,12 @@ public class PlayerPhysics : MonoBehaviour {
         // Switch the way the player is labelled as facing.
         facingRight = !facingRight;
 
-        /*
+        
         // Multiply the player's x local scale by -1.
         Vector3 theScale = transform.localScale;
         theScale.x *= -1;
         transform.localScale = theScale;
-        */
+        
     }
 
     // sets up our collider
